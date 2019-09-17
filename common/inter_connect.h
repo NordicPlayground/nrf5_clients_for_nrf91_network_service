@@ -42,8 +42,8 @@
  * @note implementation of simple control protol over UART
  */
 
-#ifndef DEVICE_CONTROL_H__
-#define DEVICE_CONTROL_H__
+#ifndef INTER_CONNECT_H__
+#define INTER_CONNECT_H__
 
 #include "nrf.h"
 #include "sdk_config.h"
@@ -54,14 +54,13 @@ extern "C" {
 
 /** Command type. */
 enum ic_cmd_type {
-	/** Arbitary data. */
-	CMD_TYPE_DATA = 0x00,
-	/** AT command service. */
-	CMD_TYPE_AT_CMD  = 0x01,
-	CMD_TYPE_SYNC_CMD,
-	CMD_TYPE_GPS_CMD,
-	CMD_TYPE_TIME_CMD,
-	/** Modem control service */
+  /** Arbitary data. */
+  CMD_TYPE_DATA = 0x00,
+  /** AT command service. */
+  CMD_TYPE_AT_CMD  = 0x01,
+  CMD_TYPE_SYNC_CMD,
+  CMD_TYPE_TIME_CMD,
+  /** Modem control service */
   CMD_TYPE_MDM_BASE = 0x10,
   CMD_TYPE_MDM_INT_CONNECT = CMD_TYPE_MDM_BASE,
   CMD_TYPE_MDM_GO_OFFLINE,
@@ -69,16 +68,16 @@ enum ic_cmd_type {
   CMD_TYPE_MDM_GO_ONLINE,
   CMD_TYPE_MDM_PSM_REQ,
   CMD_TYPE_MDM_EDRX_REQ,
-	/** MQTT service **/
+  /** MQTT service **/
   CMD_TYPE_MQTT_BASE = 0x20,
   CMD_TYPE_MQTT_CONNECT = CMD_TYPE_MQTT_BASE,
   CMD_TYPE_MQTT_DISCONNECT,
   CMD_TYPE_MQTT_SUBSCRIBE,
   CMD_TYPE_MQTT_UNSUBSCRIBE,
   CMD_TYPE_MQTT_PUBLISH, 
-	/** CoAP service **/
+  /** CoAP service **/
   CMD_TYPE_COAP_BASE = 0x30,
-	/** LWM2M service **/
+  /** LWM2M service **/
   CMD_TYPE_LWM2M_BASE = 0x40,
   CMD_TYPE_LWM2M_CONNECT = CMD_TYPE_LWM2M_BASE,
   CMD_TYPE_LWM2M_DISCONNECT,
@@ -90,12 +89,16 @@ enum ic_cmd_type {
   CMD_TYPE_LWM2M_WRITE_STRING,
   CMD_TYPE_LWM2M_READ_OPAQUE,
   CMD_TYPE_LWM2M_WRITE_OPAQUE,
-	/** Type reserved. */
-	CMD_TYPE_RESERVED  = 0x7F,
-	/** Type response base. */
-	RSP_TYPE_BASE  = 0x80,
-	/** Type unsocilicted notification */
-	RSP_TYPE_NOTIFICATION = 0xFF
+  /** GPS service **/
+  CMD_TYPE_GPS_BASE = 0x50,
+  CMD_TYPE_GPS_CONTROL = CMD_TYPE_GPS_BASE,
+  CMD_TYPE_GPS_STATE,
+  /** Type reserved. */
+  CMD_TYPE_RESERVED  = 0x7F,
+  /** Type response base. */
+  RSP_TYPE_BASE  = 0x80,
+  /** Type unsocilicted notification */
+  RSP_TYPE_NOTIFICATION = 0xFF
 };
 
 /** Unsolicited notification type. */
@@ -161,4 +164,4 @@ uint32_t inter_connect_send(uint8_t data_type, const uint8_t *data_buf, uint8_t 
 }
 #endif
 
-#endif // DEVICE_CONTROL_H__
+#endif // INTER_CONNECT_H__

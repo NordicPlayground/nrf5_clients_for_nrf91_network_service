@@ -22,11 +22,15 @@ Please clone this repository into <local_path>\nRF5_SDK_15.3.0\examples\.
 
 * AT command client and MQTT client
   * Client project: \nRF5_SDK_15.3.0\examples\nrf5-serial-lte-modem-clients\mqtt_client
-  * nRF91 Configuration: CONFIG_MQTT_SOCKET_LIB, CONFIG_THIN_MQTT_SERVICE
+  * nRF91 Configuration: CONFIG_MQTT_LIB, CONFIG_THIN_MQTT_SERVICE, CONFIG_THIN_SNTP_SERVICE
+
+* AT command client, MQTT client and GPS client
+  * Client project: \nRF5_SDK_15.3.0\examples\nrf5-serial-lte-modem-clients\mqtt_client_gps
+  * nRF91 Configuration: CONFIG_MQTT_LIB, CONFIG_THIN_MQTT_SERVICE, CONFIG_THIN_GPS_SERVICE
 
 * AT command client and LwM2M client
   * Client project: \nRF5_SDK_15.3.0\examples\nrf5-serial-lte-modem-clients\lwm2m_client
-  * nRF91 Configuration: CONFIG_LWM2M, CONFIG_THIN_LWM2M_SERVICE
+  * nRF91 Configuration: CONFIG_LWM2M, CONFIG_THIN_LWM2M_SERVICE, CONFIG_THIN_SNTP_SERVICE
 
 About this project
 ------------------

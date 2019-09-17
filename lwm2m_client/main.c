@@ -264,7 +264,6 @@ static void serial_data_handler(uint8_t data_type, const uint8_t *data_buf, uint
         {
           int year, month, day;
           int hour, minute, second;
-          //uint8_t enable_gps = 1;
 
           memcpy(&year, (data_buf + 1), 4);
           memcpy(&month, (data_buf + 5), 4);
@@ -275,18 +274,9 @@ static void serial_data_handler(uint8_t data_type, const uint8_t *data_buf, uint
 
           NRF_LOG_INFO("GMT time: %04d/%02d/%02d %02d:%02d:%02d", 
             year, month, day, hour, minute, second);
-
-          // Enabled GPS
-          //inter_connect_send(CMD_TYPE_GPS_CMD, &enable_gps, 1);
         }
     }
     break;
-
-    // GPS
-    case RSP_TYPE_BASE|CMD_TYPE_GPS_CMD:
-    {
-      NRF_LOG_INFO("GPS fix");
-    }
 
     // LwM2M
     case RSP_TYPE_BASE|CMD_TYPE_LWM2M_CONNECT:

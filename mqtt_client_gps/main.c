@@ -155,27 +155,14 @@ enum mqtt_conn_return_code {
 	MQTT_NOT_AUTHORIZED                     = 0x05
 };
 
-/** @brief MQTT SUBACK return codes. */
-enum mqtt_suback_return_code {
-	/** Subscription with QoS 0 succeeded. */
-	MQTT_SUBACK_SUCCESS_QoS_0 = 0x00,
-
-	/** Subscription with QoS 1 succeeded. */
-	MQTT_SUBACK_SUCCESS_QoS_1 = 0x01,
-
-	/** Subscription with QoS 2 succeeded. */
-	MQTT_SUBACK_SUCCESS_QoS_2 = 0x02,
-
-	/** Subscription for a topic failed. */
-	MQTT_SUBACK_FAILURE = 0x80
-};
 
 static bool mqtt_connected = false;
 APP_TIMER_DEF(m_timer);
 
+#define BROKER      "test.mosquitto.org"
+#define PORT        1883
 #define CLIENT_ID   "nRF52_MQTT_client"
-#define SUB_TOPIC   "/my/test/topic"
-#define PUB_TOPIC   "/my/test/topic"
+#define PUB_TOPIC   "/my/gps/data"
 
 static uint8_t mqtt_buf[128];
 
@@ -183,8 +170,7 @@ static uint8_t mqtt_buf[128];
  */
 void bsp_evt_handler(bsp_event_t evt)
 {
-    static bool sub_unsub = true;
-    static uint8_t pub_data = 0; 
+    static uint8_t gps_enable = 1; 
 
     switch (evt)
     {
@@ -196,7 +182,8 @@ void bsp_evt_handler(bsp_event_t evt)
             break;
 
         case BSP_EVENT_KEY_1:
-            if (mqtt_connected) {
+            if (mqtt_connected) 
+            {
               inter_connect_send(CMD_TYPE_MQTT_DISCONNECT, NULL, 0);
             }
             break;
@@ -204,43 +191,18 @@ void bsp_evt_handler(bsp_event_t evt)
         case BSP_EVENT_KEY_2:
             if (mqtt_connected) 
             {
-              if (sub_unsub) 
-              {
-                /*param format [QoS(1)][length(1)][topic(var)]*/
-                memset(mqtt_buf, 0x00, sizeof(mqtt_buf));
-//                mqtt_buf[0] = MQTT_QOS_0_AT_MOST_ONCE;
-                mqtt_buf[0] = MQTT_QOS_1_AT_LEAST_ONCE;
-//                mqtt_buf[0] = MQTT_QOS_2_EXACTLY_ONCE;
-                mqtt_buf[1] = sizeof(SUB_TOPIC)-1;
-                memcpy(&mqtt_buf[2], SUB_TOPIC, sizeof(SUB_TOPIC)-1);
-                inter_connect_send(CMD_TYPE_MQTT_SUBSCRIBE, mqtt_buf, sizeof(SUB_TOPIC)+1);
-              }
+              inter_connect_send(CMD_TYPE_GPS_CONTROL, &gps_enable, 1);
+              if (gps_enable)
+                gps_enable = 0;
               else
-              {
-                /*param format [topic(var)]*/ 
-                inter_connect_send(CMD_TYPE_MQTT_UNSUBSCRIBE, SUB_TOPIC, sizeof(SUB_TOPIC)-1);
-              }
-              sub_unsub = !sub_unsub;
+                gps_enable = 1;
             }
             break;
 
         case BSP_EVENT_KEY_3:
-            if (mqtt_connected)
+            if (mqtt_connected) 
             {
-                /*param format [QoS(1)][length(1)][topic(var)][length(1)][data(var)]*/
-                uint8_t size_topic = sizeof(PUB_TOPIC)-1;
-
-                memset(mqtt_buf, 0x00, sizeof(mqtt_buf));
-//                mqtt_buf[0] = MQTT_QOS_0_AT_MOST_ONCE;
-                mqtt_buf[0] = MQTT_QOS_1_AT_LEAST_ONCE;
-//                mqtt_buf[0] = MQTT_QOS_2_EXACTLY_ONCE;
-                mqtt_buf[1] = size_topic;
-                memcpy(&mqtt_buf[2], PUB_TOPIC, size_topic);
-                mqtt_buf[2+size_topic] = 0x01;
-                mqtt_buf[3+size_topic] = pub_data;
-                inter_connect_send(CMD_TYPE_MQTT_PUBLISH, mqtt_buf, size_topic+4);
-              
-                pub_data++;
+              inter_connect_send(CMD_TYPE_GPS_STATE, NULL, 0);
             }
             break;
             
@@ -300,42 +262,26 @@ static void serial_data_handler(uint8_t data_type, const uint8_t *data_buf, uint
       if (*data_buf == 0)
       {
         NRF_LOG_INFO("LTE connected");
-        inter_connect_send(CMD_TYPE_TIME_CMD, NULL, 0);
       }
       else
       {
         NRF_LOG_INFO("LTE connection failed (%d)", *data_buf);
       }      
       break;
-      
-    // Current GMT:
-    case RSP_TYPE_BASE|CMD_TYPE_TIME_CMD:
-    {
-        int8_t result = *data_buf;
-        if (result == 0)
-        {
-          int year, month, day;
-          int hour, minute, second;
-
-          memcpy(&year, (data_buf + 1), 4);
-          memcpy(&month, (data_buf + 5), 4);
-          memcpy(&day, (data_buf + 9), 4);
-          memcpy(&hour, (data_buf + 13), 4);
-          memcpy(&minute, (data_buf + 17), 4);
-          memcpy(&second, (data_buf + 21), 4);
-
-          NRF_LOG_INFO("GMT time: %04d/%02d/%02d %02d:%02d:%02d", 
-            year, month, day, hour, minute, second);
-        }
-    }
-    break;
-
+     
     // MQTT
     case RSP_TYPE_BASE|CMD_TYPE_MQTT_CONNECT:
     case RSP_TYPE_BASE|CMD_TYPE_MQTT_DISCONNECT:
     case RSP_TYPE_BASE|CMD_TYPE_MQTT_SUBSCRIBE:
     case RSP_TYPE_BASE|CMD_TYPE_MQTT_UNSUBSCRIBE:
     case RSP_TYPE_BASE|CMD_TYPE_MQTT_PUBLISH:
+      break;
+
+    // GPS
+    case RSP_TYPE_BASE|CMD_TYPE_GPS_CONTROL:
+      break;
+    case RSP_TYPE_BASE|CMD_TYPE_GPS_STATE:
+      NRF_LOG_INFO("GPS Enabled: %d, Active: %d", *(data_buf), *(data_buf+1));
       break;
     
     case RSP_TYPE_NOTIFICATION:
@@ -360,14 +306,6 @@ static void serial_data_handler(uint8_t data_type, const uint8_t *data_buf, uint
           NRF_LOG_INFO("Disconnect result: %d", res);
           mqtt_connected = false;
         }
-        if (evt == MQTT_EVT_SUBACK)
-        {
-          NRF_LOG_INFO("Subscribe result: %d", res);
-        }
-        if (evt == MQTT_EVT_UNSUBACK)
-        {
-          NRF_LOG_INFO("Unsubscribe result: %d", res);
-        }
         if (evt == MQTT_EVT_PUBACK)
         {
           NRF_LOG_INFO("Publish result: %d", res);
@@ -376,6 +314,21 @@ static void serial_data_handler(uint8_t data_type, const uint8_t *data_buf, uint
         {
           NRF_LOG_INFO("PUB received: %d", res);
         }
+      }
+      else if (type == NOT_TYPE_GPS)
+      {
+        /*param format [QoS(1)][length(1)][topic(var)][length(1)][data(var)]*/
+        uint8_t size_topic = sizeof(PUB_TOPIC)-1;
+
+        memset(mqtt_buf, 0x00, sizeof(mqtt_buf));
+        mqtt_buf[0] = MQTT_QOS_0_AT_MOST_ONCE;
+//       mqtt_buf[0] = MQTT_QOS_1_AT_LEAST_ONCE;
+//       mqtt_buf[0] = MQTT_QOS_2_EXACTLY_ONCE;
+        mqtt_buf[1] = size_topic;
+        memcpy(&mqtt_buf[2], PUB_TOPIC, size_topic);
+        mqtt_buf[2+size_topic] = data_len;
+        memcpy(&mqtt_buf[3+size_topic], data_buf, data_len);
+        inter_connect_send(CMD_TYPE_MQTT_PUBLISH, mqtt_buf, size_topic+data_len+3);
       }
     } break;
 
