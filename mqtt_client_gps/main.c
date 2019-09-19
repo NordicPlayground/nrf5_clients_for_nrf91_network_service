@@ -54,8 +54,6 @@
 #include "nordic_common.h"
 #include "nrf_error.h"
 #include "nrf_gpio.h"
-
-#include "rtt_input.h"
 #include "inter_connect.h"
 
 #include "nrf_log.h"
@@ -362,7 +360,7 @@ int main(void)
     err_code = inter_connect_init(serial_data_handler);
     APP_ERROR_CHECK(err_code);
 
-    NRF_LOG_INFO("MQTT client started.");
+    NRF_LOG_INFO("MQTT/GPS client started.");
     bsp_configuration();
 
     err_code = app_timer_create(&m_timer, APP_TIMER_MODE_REPEATED, timer_handle);

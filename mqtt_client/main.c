@@ -54,8 +54,6 @@
 #include "nordic_common.h"
 #include "nrf_error.h"
 #include "nrf_gpio.h"
-
-#include "rtt_input.h"
 #include "inter_connect.h"
 
 #include "nrf_log.h"
