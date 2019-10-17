@@ -93,6 +93,14 @@ enum ic_cmd_type {
   CMD_TYPE_GPS_BASE = 0x50,
   CMD_TYPE_GPS_CONTROL = CMD_TYPE_GPS_BASE,
   CMD_TYPE_GPS_STATE,
+	/** TCP/IP service **/
+  CMD_TYPE_TCPIP_BASE = 0x60,
+  CMD_TYPE_TCP_CONNECT = CMD_TYPE_TCPIP_BASE,
+  CMD_TYPE_TCP_DISCONNECT,
+  CMD_TYPE_TCP_SEND,
+  CMD_TYPE_TCP_RECEIVE,
+  CMD_TYPE_UDP_SENDTO,
+  CMD_TYPE_UDP_RECEIVEFROM,
   /** Type reserved. */
   CMD_TYPE_RESERVED  = 0x7F,
   /** Type response base. */
@@ -118,6 +126,10 @@ enum ic_notify_type {
   NOT_TYPE_LWM2M_OBJECT,      // LwM2M Object events
   /** Notification type GPS */
   NOT_TYPE_GPS,
+	/** Notification type TCP */
+	NOT_TYPE_TCP,
+	/** Notification type UDP */
+	NOT_TYPE_UDP,
 
   NOT_TYPE_INVALID
 };
