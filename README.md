@@ -22,51 +22,51 @@ Below samples automatically establish the LTE connection on start-up, using the 
   * Client project: \nRF5_SDK_15.3.0\examples\nrf5-nrf91-network-clients\mqtt_client
   * nRF91 Configuration: CONFIG_MQTT_LIB, CONFIG_THIN_MQTT_SERVICE, CONFIG_THIN_SNTP_SERVICE
 
-Works with MQTT service. The same topic for publishing and subscribing is used to test message sending and receiving on nRF52 side. It is also possible to change QoS level by updating the code. The buttons on DK are defined as below: 
-  Button#1: connect to the Broker server
-  Button#2: disconnect from the Broker server
-  Button#3: subscribe/unsubscribe a topic from the Broker
-  Button#4: publish to the Broker
+Works with MQTT service. The same topic for publishing and subscribing is used to test message sending and receiving on nRF52 side. It is also possible to change QoS level by updating the code. The buttons on DK are defined as below:  
+  Button#1: connect to the Broker server  
+  Button#2: disconnect from the Broker server  
+  Button#3: subscribe/unsubscribe a topic from the Broker  
+  Button#4: publish to the Broker  
 
 * MQTT client and GPS client
   * Client project: \nRF5_SDK_15.3.0\examples\nrf5-nrf91-network-clients\mqtt_client_gps
   * nRF91 Configuration: CONFIG_MQTT_LIB, CONFIG_THIN_MQTT_SERVICE, CONFIG_THIN_GPS_SERVICE
 
-Works with MQTT and GPS services.  The buttons on DK are defined as below: 
-  Button#1: connect to the Broker server
-  Button#2: disconnect from the Broker server
-  Button#3: enable/disable GPS position acquisition
-  Button#4: Get GPS enabled/disabled and active/idle status
+Works with MQTT and GPS services.  The buttons on DK are defined as below:  
+  Button#1: connect to the Broker server  
+  Button#2: disconnect from the Broker server  
+  Button#3: enable/disable GPS position acquisition  
+  Button#4: Get GPS enabled/disabled and active/idle status  
 
 * LwM2M client
   * Client project: \nRF5_SDK_15.3.0\examples\nrf5-nrf91-network-clients\lwm2m_client
   * nRF91 Configuration: CONFIG_LWM2M, CONFIG_THIN_LWM2M_SERVICE, CONFIG_THIN_SNTP_SERVICE
 
-Works with LwM2M service. The buttons on DK are defined as below:
-  Button#1: connect/disconnect to the Bootstrap or the LwM2M server
-  Button#2: can be used to test read/write integer/float/string, etc.
-  Button#3: toggle LED1 and, if Observe is set, notify the LwM2M server
-  Button#4: toggle LED2 and, if Observe is set, notify the LwM2M server
+Works with LwM2M service. The buttons on DK are defined as below:  
+  Button#1: connect/disconnect to the Bootstrap or the LwM2M server  
+  Button#2: can be used to test read/write integer/float/string, etc.  
+  Button#3: toggle LED1 and, if Observe is set, notify the LwM2M server  
+  Button#4: toggle LED2 and, if Observe is set, notify the LwM2M server  
 
 * TCP client
   * Client project: \nRF5_SDK_15.3.0\examples\nrf5-nrf91-network-clients\tcp_client
   * nRF91 Configuration: CONFIG_THIN_TCPIP_SERVICE, CONFIG_THIN_SNTP_SERVICE
 
-Works with TCP service. The buttons on DK are defined as below: 
-  Button#1: connect to remote TCP server by hostname
-  Button#2: connect to remote TCP server by IP address
-  Button#3: disconnect from the remote server
-  Button#4: send data to remote server
+Works with TCP service. The buttons on DK are defined as below:  
+  Button#1: connect to remote TCP server by hostname  
+  Button#2: connect to remote TCP server by IP address  
+  Button#3: disconnect from the remote server  
+  Button#4: send data to remote server  
 
 TCP Receive is sent after TCP Send is acknowledged.
 
-* AT command client and UDP client
+* UDP client
   * Client project: \nRF5_SDK_15.3.0\examples\nrf5-nrf91-network-clients\tcp_client
   * nRF91 Configuration: CONFIG_THIN_TCPIP_SERVICE, CONFIG_THIN_SNTP_SERVICE
 
-Works with UDP service. The buttons on DK are defined as below: 
-  Button#1: send data to remote server by hostname
-  Button#2: send data to remote server by IP address
+Works with UDP service. The buttons on DK are defined as below:  
+  Button#1: send data to remote server by hostname  
+  Button#2: send data to remote server by IP address  
 
 UDP ReceiveFrom is sent after UDP SendTo is acknowledged.
 
