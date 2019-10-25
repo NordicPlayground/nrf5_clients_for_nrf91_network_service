@@ -228,7 +228,6 @@ static void serial_data_handler(uint8_t data_type, const uint8_t *data_buf, uint
   switch (data_type)
   {
     case CMD_TYPE_DATA:
-    case RSP_TYPE_BASE|CMD_TYPE_AT_CMD:
       NRF_LOG_INFO("%s", data_buf);
       break;
 

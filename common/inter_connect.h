@@ -57,8 +57,8 @@ enum ic_cmd_type {
   /** Arbitary data. */
   CMD_TYPE_DATA = 0x00,
   /** AT command service. */
-  CMD_TYPE_AT_CMD  = 0x01,
-  CMD_TYPE_SYNC_CMD,
+	CMD_TYPE_GENERIC_BASE = 0x01,
+  CMD_TYPE_SYNC_CMD = CMD_TYPE_GENERIC_BASE,
   CMD_TYPE_TIME_CMD,
   /** Modem control service */
   CMD_TYPE_MDM_BASE = 0x10,
