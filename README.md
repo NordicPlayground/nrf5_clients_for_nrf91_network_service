@@ -2,9 +2,6 @@ nRF52 sample clients for nRF91 newtork service
 ==============================================
 This repository contains nRF52 sample projects as nrf91 nrf9160/network_service_proxy clients.
 
-More about nrf91-network project, please refer to below link first
-https://github.com/NordicPlayground/fw-nrfconnect-nrf/tree/master/samples/nrf9160/network_service_proxy
-
 Environments
 ------------
 To build nRF52 projects:
